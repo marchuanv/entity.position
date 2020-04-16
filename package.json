@@ -4,7 +4,8 @@
   "description": "",
   "main": "entity.position.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prestart": "npm update",
+    "start": "node entity.position.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,6 @@
   },
   "homepage": "https://github.com/marchuanv/entity.position#readme",
   "dependencies": {
-    "broadcast": "git+https://github.com/marchuanv/broadcast.git"
+    "messagebus": "git+https://github.com/marchuanv/messagebus.git"
   }
 }
