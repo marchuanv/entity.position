@@ -1,0 +1,24 @@
+<html >
+    <head>
+        <title>Entity Position Test</title>
+    </head>
+    <body>
+        <script>
+            document.addEventListener('keypress', async function(event) {
+                if (event.key === "w" || event.key === "a" || event.key === "s" || event.key === "d"){
+                    console.log(await fetch("http://localhost:4000/move", {
+                        method: "POST",
+                     
+                            "content-type": "application/json", 
+                            username:"admin", 
+                            passphrase:"secure1",
+                            "Access-Control-Allow-Origin": "*",
+                            "Access-Control-Allow-Headers": "*"
+                        ,
+                        body: ""
+                    }));
+                }
+            });
+        </script>
+    </body>
+</html>
