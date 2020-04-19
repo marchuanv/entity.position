@@ -17,14 +17,19 @@ const contentType = "application/json";
 const username = process.env.PLAYERNAME || "anonymous";
 const passphrase = process.env.PASSPHRASE || "secure1";
 
-messagebus.subscribe({ host, port, path: "/move", contentType }).callback = (entity) => {
-    const message = `${publicHost}:${publicPort} received response`;
-    utils.log("Entity Moved",`${message}: `, entity);
-    return message;
-}
+(async () => {
+    
+    await messagebus.publish({ username, passphrase, host: destHost, port: destPort, path: registerPath, contentType, content: { host: publicHost,  port: publicPort, path }});
 
-// (async () => {
-//     const entity = {name: username, position: { x:0, y:0, z:0 }};
-//     await messagebus.publish({ username, passphrase, host: destHost, port: destPort, path: registerPath, contentType, content: { host: publicHost,  port: publicPort, path }});
-//     await messagebus.publish({ username, passphrase, host: destHost, port: destPort, path: broadcastPath, contentType, content: { path, contentType, content: entity }});
-// })();
+    messagebus.subscribe({ host, port, path: broadcastPath, contentType }).callback = (entity) => {
+        utils.log("Remote Entity Moved","", entity);
+        return `${publicHost}:${publicPort} received response`;
+    }
+
+    messagebus.subscribe({ host, port, path: "/move", contentType }).callback = (entity) => {
+        utils.log("Local Entity Moved","", entity);
+        await messagebus.publish({ username, passphrase, host: destHost, port: destPort, path: broadcastPath, contentType, content: { path, contentType, content: entity }});
+        return `${publicHost}:${publicPort} received response`;
+    }
+
+})();

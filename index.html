@@ -1,17 +1,22 @@
 <html >
     <head>
         <title>Entity Position Test</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/2.3.1/jsencrypt.js"> </script>
     </head>
     <body>
         <script>
+            const entity = {
+                name: "admin",
+                position: { x:0, y:0, z:0 }
+            };
+            const encrypt = new window.JSEncrypt();
             document.addEventListener('keypress', async function(event) {
                 if (event.key === "w" || event.key === "a" || event.key === "s" || event.key === "d"){
                     const securityRes = await fetch("http://localhost:4000/move", { method: "GET", headers: { 'content-type': 'text/plain', 'username': 'admin', 'passphrase': 'secure1'} });
                     const token = securityRes.headers.get("token");
-                    const res = await fetch("http://localhost:4000/move", { method: "POST", headers: { 'content-type': 'application/json', token}, body: {
-                        name: "admin",
-                        position: { x:0, y:0, z:0 }
-                    }});
+                    encrypt.setPublicKey(atob(securityRes.headers.get("publickey")));
+                    const encryptedBody = encrypt.encrypt(JSON.stringify(entity));
+                    const res = await fetch("http://localhost:4000/move", { method: "POST", headers: { 'content-type': 'application/json', token}, body: encryptedBody });
                     console.log("response: ",res.json());
                 }
             });
