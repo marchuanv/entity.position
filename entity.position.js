@@ -4,11 +4,11 @@ const utils = require("utils");
 const host = process.env.HOST || "localhost";
 const port = process.env.PORT || 4000;
 
-const publicHost = process.env.PUB_HOST || "localhost";
-const publicPort = process.env.PUB_PORT || 4000;
+const publicHost = process.env.PUB_HOST || host;
+const publicPort = process.env.PUB_PORT || port;
 
-const destHost = process.env.DEST_HOST || "localhost";
-const destPort = process.env.DEST_PORT || 5000;
+const broadcastHost = process.env.BROADCAST_HOST || "localhost";
+const broadcastPort = process.env.BROADCAST_PORT || 5000;
 
 const path = "/entity/position";
 const broadcastPath = "/broadcast";
@@ -19,7 +19,7 @@ const passphrase = process.env.PASSPHRASE || "secure1";
 
 (async () => {
     
-    await messagebus.publish({ username, passphrase, host: destHost, port: destPort, path: registerPath, contentType, content: { host: publicHost,  port: publicPort, path }});
+    await messagebus.publish({ username, passphrase, host: broadcastHost, port: broadcastPort, path: registerPath, contentType, content: { host: publicHost,  port: publicPort, path }});
 
     messagebus.subscribe({ host, port, path: broadcastPath, contentType }).callback = (entity) => {
         utils.log("Remote Entity Moved","", entity);
@@ -28,7 +28,7 @@ const passphrase = process.env.PASSPHRASE || "secure1";
 
     messagebus.subscribe({ host, port, path: "/move", contentType }).callback = async (entity) => {
         utils.log("Local Entity Moved","", entity);
-        await messagebus.publish({ username, passphrase, host: destHost, port: destPort, path: broadcastPath, contentType, content: { path, contentType, content: entity }});
+        await messagebus.publish({ username, passphrase, host: broadcastHost, port: broadcastPort, path: broadcastPath, contentType, content: { path, contentType, content: entity }});
         return `${publicHost}:${publicPort} received response`;
     }
 
