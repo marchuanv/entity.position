@@ -22,12 +22,12 @@ const passphrase = process.env.PASSPHRASE || "secure1";
     await messagebus.publish({ username, passphrase, host: broadcastHost, port: broadcastPort, path: registerPath, contentType, content: { host: publicHost,  port: publicPort, path }});
 
     messagebus.subscribe({ host, port, path: broadcastPath, contentType }).callback = (entity) => {
-        utils.log("Remote Entity Moved","", entity);
+        utils.log("ENTITY POSITION",`remote entity: ${entity.name} has moved`, entity.position);
         return `${publicHost}:${publicPort} received response`;
     }
 
     messagebus.subscribe({ host, port, path: "/move", contentType }).callback = async (entity) => {
-        utils.log("Local Entity Moved","", entity);
+        utils.log("ENTITY POSITION",`local entity: ${entity.name} has moved`, entity.position);
         await messagebus.publish({ username, passphrase, host: broadcastHost, port: broadcastPort, path: broadcastPath, contentType, content: { path, contentType, content: entity }});
         return `${publicHost}:${publicPort} received response`;
     }
