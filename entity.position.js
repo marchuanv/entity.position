@@ -26,7 +26,7 @@ const passphrase = process.env.PASSPHRASE || "secure1";
         return `${publicHost}:${publicPort} received response`;
     }
 
-    messagebus.subscribe({ host, port, path: "/move", contentType }).callback = (entity) => {
+    messagebus.subscribe({ host, port, path: "/move", contentType }).callback = async (entity) => {
         utils.log("Local Entity Moved","", entity);
         await messagebus.publish({ username, passphrase, host: destHost, port: destPort, path: broadcastPath, contentType, content: { path, contentType, content: entity }});
         return `${publicHost}:${publicPort} received response`;
