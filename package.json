@@ -4,8 +4,7 @@
   "description": "",
   "main": "entity.position.js",
   "scripts": {
-    "preinstall": "rm -r node_modules",
-    "prestart": "npm install",
+    "prestart": "rm -r node_modules && npm install",
     "start": "node entity.position.js"
   },
   "repository": {
