@@ -4,7 +4,7 @@
   "description": "",
   "main": "entity.position.js",
   "scripts": {
-    "prestart": "npm update",
+    "prestart": "npm update component && npm update component.secure && npm update messagebus",
     "start": "node entity.position.js"
   },
   "repository": {
@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/marchuanv/entity.position#readme",
   "dependencies": {
-    "messagebus": "git+https://github.com/marchuanv/messagebus.git"
+    "messagebus": "git+https://github.com/marchuanv/messagebus.git",
+    "component": "git+https://github.com/marchuanv/component.git",
+    "component.secure": "git+https://github.com/marchuanv/component.secure.git"
   }
 }
