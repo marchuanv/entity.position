@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "entity.position.js",
+  "engines": {
+    "node": "12.16.1",
+    "npm": "6.13.4"
+  },
   "scripts": {
     "prestart": "npm update component && npm update component.secure && npm update messagebus",
     "start": "node entity.position.js"
