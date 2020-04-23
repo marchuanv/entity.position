@@ -31,7 +31,7 @@ const passphrase = process.env.PASSPHRASE || "secure1";
         return `${publicHost}:${publicPort} received response`;
     }
 
-    messagebus.subscribe({ host, port, path: "/", contentType: "text/html" }).callback = async () => {
+    messagebus.subscribe({ host, port, path: "/", contentType: "text/html", isSecure: true }).callback = async () => {
         return `<html>\r\n <head>\r\n <title>Entity Position Test<\/title>\r\n <script src=\"https:\/\/cdnjs.cloudflare.com\/ajax\/libs\/jsencrypt\/2.3.1\/jsencrypt.js\"> <\/script>\r\n <\/head>\r\n <body>\r\n        <script>\r\n            const entity = {\r\n                name: \"admin\",\r\n                position: { x:0, y:0, z:0 }\r\n            };\r\n            const encrypt = new window.JSEncrypt();\r\n            document.addEventListener(\'keypress\', async function(event) {\r\n                if (event.key === \"w\" || event.key === \"a\" || event.key === \"s\" || event.key === \"d\"){\r\n                    const securityRes = await fetch(\"\/local\/move\", { method: \"GET\", headers: { \'content-type\': \'text\/plain\', \'username\': \'admin\', \'passphrase\': \'secure1\'} });\r\n  const token = securityRes.headers.get(\"token\");\r\n encrypt.setPublicKey(atob(securityRes.headers.get(\"publickey\")));\r\n const encryptedBody = encrypt.encrypt(JSON.stringify(entity));\r\n const res = await fetch(\"\/local\/move\", { method: \"POST\", headers: { \'content-type\': \'application\/json\', token}, body: encryptedBody });\r\n console.log(\"response: \",res.json());\r\n  }\r\n  });\r\n <\/script>\r\n  <\/body>\r\n<\/html>`
     }
 
