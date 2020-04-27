@@ -8,7 +8,7 @@
     "npm": "6.13.4"
   },
   "scripts": {
-    "prestart": "npm install --force",
+    "preinstall": "npm cache clean --force",
     "start": "node entity.position.js"
   },
   "repository": {
