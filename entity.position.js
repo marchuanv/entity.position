@@ -10,11 +10,10 @@ const publicPort = process.env.PUB_PORT || port;
 const broadcastHost = process.env.BROADCAST_HOST || "localhost";
 const broadcastPort = process.env.BROADCAST_PORT || 5000;
 
-const path = "/entity/position";
 const broadcastPath = "/broadcast";
 const registerPath = "/register";
 const contentType = "application/json";
-const username = process.env.PLAYERNAME || "anonymous";
+const username = process.env.USERNAME || "anonymous";
 const passphrase = process.env.PASSPHRASE || "secure1";
 
 (async () => {
