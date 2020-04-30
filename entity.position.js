@@ -33,13 +33,14 @@ logging.config([
 
     messagebus.subscribe({ publicHost, publicPort, privatePort, path: "/local/move", contentType }).callback = async (entity) => {
         logging.write("Entity Position",`local entity ${entity.name} has moved`, entity.position);
-        await messagebus.publish({ username, passphrase, publicHost: broadcastHost, publicPort: broadcastPort, path: registerPath, contentType, content: { host: publicHost,  port: publicPort, path: "/remote/move" }});
         await messagebus.publish({ username, passphrase, publicHost: broadcastHost, publicPort: broadcastPort, path: broadcastPath, contentType, content: { path: "/remote/move", contentType, content: entity }});
     }
 
     messagebus.subscribe({ publicHost, publicPort, privatePort, path: "/", contentType: "text/html", isSecure: false }).callback = async () => {
         return fs.readFileSync("./entity.position.html","utf8");
     }
+
+    await messagebus.publish({ username, passphrase, publicHost: broadcastHost, publicPort: broadcastPort, path: registerPath, contentType, content: { host: publicHost,  port: publicPort, path: "/remote/move" }});
 
 })().catch((err)=>{
     console.log(err);
