@@ -15,7 +15,7 @@
             encrypt.setPublicKey(atob(encryptionkey));
             const encryptedBody = encrypt.encrypt(JSON.stringify(entity));
             const res = await fetch("/local/move", { method: "POST", headers: { 'content-type': 'application/json', token, encryptionkey }, body: encryptedBody });
-            console.log("response: ",res.json());
+            console.log("response: ",res.text());
         }
     });
     </script>
