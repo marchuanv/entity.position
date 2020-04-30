@@ -5,22 +5,32 @@
  </head>
  <body>
     <script>
-    const entity = { name: "admin", position: { x:0, y:0, z:0 }};
-    const encrypt = new window.JSEncrypt();
-    document.addEventListener('keypress', async function(event) {
-        if (event.key === "w" || event.key === "a" || event.key === "s" || event.key === "d"){
-            let host = location.host.split(":");
-            const requesthost = host[0];
-            const requestport = host[1];
-            const securityRes = await fetch("/authenticate", { method: "GET", headers: { 'content-type': 'text/plain', username: 'admin', passphrase: 'secure1', requesthost, requestport } });
-            const token = securityRes.headers.get("token");
-            const encryptionkey = securityRes.headers.get("encryptionkey");
-            encrypt.setPublicKey(atob(encryptionkey));
+        const entity = { name: "admin", position: { x:0, y:0, z:0 }};
+        const encrypt = new window.JSEncrypt();
+        let host = location.host.split(":");
+        const requesthost = host[0];
+        const requestport = host[1];
+        const securityRes = await fetch("/authenticate", { method: "GET", headers: { 'content-type': 'text/plain', username: 'admin', passphrase: 'secure1', requesthost, requestport } });
+        const token = securityRes.headers.get("token");
+        const encryptionkey = securityRes.headers.get("encryptionkey");
+        encrypt.setPublicKey(atob(encryptionkey));
+        document.addEventListener('keypress', async (event) => {
+            if (event.key === "w"){
+                entity.x = entity.x + 1; 
+            }
+            if ( event.key === "a"){
+                entity.x = entity.x - 1;
+            }
+            if ( event.key === "s"){
+                entity.y = entity.y - 1;
+            }
+            if ( event.key === "d"){
+                entity.y = entity.y + 1;
+            }
             const encryptedBody = encrypt.encrypt(JSON.stringify(entity));
             const res = await fetch("/local/move", { method: "POST", headers: { 'content-type': 'application/json', token, encryptionkey }, body: encryptedBody });
-            console.log("response: ",res.text());
-        }
-    });
+            console.log("response: ",await res.text());
+        });
     </script>
  </body>
 </html>
