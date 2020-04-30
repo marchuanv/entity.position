@@ -22,8 +22,9 @@
   },
   "homepage": "https://github.com/marchuanv/entity.position#readme",
   "dependencies": {
+    "messagebus": "git+https://github.com/marchuanv/messagebus.git",
     "component": "git+https://github.com/marchuanv/component.git",
     "component.secure": "git+https://github.com/marchuanv/component.secure.git",
-    "messagebus": "git+https://github.com/marchuanv/messagebus.git"
+    "logging": "git+https://github.com/marchuanv/logging.git"
   }
 }

@@ -17,14 +17,24 @@ const contentType = "application/json";
 const username = process.env.USERNAME || "anonymous";
 const passphrase = process.env.PASSPHRASE || "secure1";
 
+const logging = require("logging");
+logging.config([
+    "Entity Position",
+    "MessageBus Publisher",
+    "MessageBus Subscriber",
+    "Component Client",
+    "Component Server",
+    "Component Secure"
+]);
+
 (async () => {
 
     messagebus.subscribe({ host, port, path: "/remote/move", contentType }).callback = (entity) => {
-        utils.log("ENTITY POSITION",`remote entity ${entity.name} has moved`, entity.position);
+        logging.write("Entity Position",`remote entity ${entity.name} has moved`, entity.position);
     }
 
     messagebus.subscribe({ host, port, path: "/local/move", contentType }).callback = async (entity) => {
-        utils.log("ENTITY POSITION",`local entity ${entity.name} has moved`, entity.position);
+        logging.write("Entity Position",`local entity ${entity.name} has moved`, entity.position);
         await messagebus.publish({ username, passphrase, host: broadcastHost, port: broadcastPort, path: registerPath, contentType, content: { host: publicHost,  port: publicPort, path: "/remote/move" }});
         await messagebus.publish({ username, passphrase, host: broadcastHost, port: broadcastPort, path: broadcastPath, contentType, content: { path: "/remote/move", contentType, content: entity }});
     }
