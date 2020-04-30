@@ -24,7 +24,8 @@ logging.config([
     "MessageBus Subscriber",
     "Component Client",
     "Component Server",
-    "Component Secure"
+    "Component Secure Client",
+    "Component Secure Server"
 ]);
 
 (async () => {
