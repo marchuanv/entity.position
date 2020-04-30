@@ -9,7 +9,10 @@
     const encrypt = new window.JSEncrypt();
     document.addEventListener('keypress', async function(event) {
         if (event.key === "w" || event.key === "a" || event.key === "s" || event.key === "d"){
-            const securityRes = await fetch("/authenticate", { method: "GET", headers: { 'content-type': 'text/plain', 'username': 'admin', 'passphrase': 'secure1'} });
+            let host = location.host.split(":");
+            const requesthost = host[0];
+            const requestport = host[1];
+            const securityRes = await fetch("/authenticate", { method: "GET", headers: { 'content-type': 'text/plain', username: 'admin', passphrase: 'secure1', requesthost, requestport } });
             const token = securityRes.headers.get("token");
             const encryptionkey = securityRes.headers.get("encryptionkey");
             encrypt.setPublicKey(atob(encryptionkey));
