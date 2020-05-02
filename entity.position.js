@@ -1,6 +1,5 @@
 const messagebus = require("messagebus");
 const fs = require("fs");
-const componentSecure = require("component.secure");
 
 const sourcePrivatePort = Number(process.env.PORT || 4000);
 const sourcePublicHost = process.env.PUB_HOST || "localhost";
@@ -8,10 +7,6 @@ const sourcePublicPort = Number(process.env.PUB_PORT || sourcePrivatePort);
 
 const broadcastHost = process.env.BROADCAST_HOST || sourcePublicHost;
 const broadcastPort = Number(process.env.BROADCAST_PORT || 5000);
-
-
-const username = process.env.USERNAME || "anonymous";
-const passphrase = process.env.PASSPHRASE || "secure1";
 
 const logging = require("logging");
 logging.config([
@@ -25,15 +20,8 @@ logging.config([
     "Component Secure Client",
     "Component Secure Server"
 ]);
-
-const hashPassphrase = (username, passphrase) => {
-    const { hashedPassphrase, salt } = componentSecure.http.secure.hashPassphrase(passphrase);
-    return {username, hashedPassphrase, hashedPassphraseSalt: salt };
-}
-
 (async () => {
-
-    messagebus.subscribe({ id: "RegisterUser", username: "registeruser", passphrase: "unsecure1", 
+    messagebus.subscribe({ id: "RegisterUser", username: "anonymous", passphrase: "anonymous", 
         address: { 
             channel: "register",
             from: { private: { host: "localhost", port: sourcePrivatePort },public: { host: sourcePublicHost, port: sourcePublicPort }}
@@ -87,7 +75,7 @@ const hashPassphrase = (username, passphrase) => {
             });
         }
     });
-    messagebus.subscribe({ id: "index", username, passphrase, isSecure: false,
+    messagebus.subscribe({ id: "index", username: "anonymous", passphrase: "anonymous", isSecure: false,
         address: { 
             channel: "index",
             from: { private: { host: "localhost", port: sourcePrivatePort }, public: { host: sourcePublicHost, port: sourcePublicPort }}
@@ -97,7 +85,6 @@ const hashPassphrase = (username, passphrase) => {
             return fs.readFileSync("./entity.position.html","utf8");
         }
     });
-
 })().catch((err)=>{
     console.log(err);
 });
