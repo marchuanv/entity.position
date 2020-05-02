@@ -8,7 +8,7 @@
     "npm": "6.13.4"
   },
   "scripts": {
-    "start": "node entity.position.js"
+    "start": "npm install --force && node entity.position.js"
   },
   "repository": {
     "type": "git",
